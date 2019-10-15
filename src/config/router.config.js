@@ -133,6 +133,29 @@ export const asyncRouterMap = [
 
       // profile
       {
+        path: '/system',
+        name: 'system',
+        component: RouteView,
+        redirect: '/system/user',
+        meta: { title: '系统管理', icon: 'profile', permission: [ 'system' ] },
+        children: [
+          {
+            path: '/system/user',
+            name: 'User',
+            component: () => import('@/views/system/user/User'),
+            meta: { title: '用户管理', permission: [ 'system' ] }
+          },
+          {
+            path: '/system/role',
+            name: 'Role',
+            component: () => import('@/views/system/role/Role'),
+            meta: { title: '角色管理', permission: [ 'system' ] }
+          }
+        ]
+      },
+
+      // profile
+      {
         path: '/profile',
         name: 'profile',
         component: RouteView,
@@ -344,17 +367,17 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Login')
       },
       {
         path: 'register',
         name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Register')
       },
       {
         path: 'register-result',
         name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+        component: () => import(/* webpackChunkName: "user" */ '@/views/RegisterResult')
       },
       {
         path: 'recover',

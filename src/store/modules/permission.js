@@ -39,13 +39,14 @@ function hasRole(roles, route) {
 
 function filterAsyncRouter (routerMap, roles) {
   const accessedRouters = routerMap.filter(route => {
-    if (hasPermission(roles.permissionList, route)) {
-      if (route.children && route.children.length) {
-        route.children = filterAsyncRouter(route.children, roles)
-      }
-      return true
-    }
-    return false
+    // if (hasPermission(roles.permissionList, route)) {
+    //   if (route.children && route.children.length) {
+    //     route.children = filterAsyncRouter(route.children, roles)
+    //   }
+    //   return true
+    // }
+    return true
+    // return false
   })
   return accessedRouters
 }

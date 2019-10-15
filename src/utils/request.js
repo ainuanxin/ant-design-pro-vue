@@ -11,6 +11,18 @@ const service = axios.create({
   timeout: 6000 // 请求超时时间
 })
 
+// 获取token
+const getToken = url => {
+  let token = ''
+  const storeToken = Vue.ls.get(ACCESS_TOKEN)
+  if (url.indexOf('/oauth/token') !== -1) {
+    token = 'Basic ZnJvbnQ6ZnJvbnQ='
+  } else if (storeToken) {
+    token = 'Bearer ' + storeToken
+  }
+  return token
+}
+
 const err = (error) => {
   if (error.response) {
     const data = error.response.data
@@ -20,8 +32,9 @@ const err = (error) => {
         message: 'Forbidden',
         description: data.message
       })
+      return Promise.reject(error)
     }
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
+    if (error.response.status === 401) {
       notification.error({
         message: 'Unauthorized',
         description: 'Authorization verification failed'
@@ -33,23 +46,36 @@ const err = (error) => {
           }, 1500)
         })
       }
+      return Promise.reject(error)
     }
+    notification.error({
+      message: '请求错误',
+      description: data.message
+    })
   }
   return Promise.reject(error)
 }
 
 // request interceptor
 service.interceptors.request.use(config => {
-  const token = Vue.ls.get(ACCESS_TOKEN)
+  const token = getToken(config.url)
   if (token) {
-    config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+    config.headers['Authorization'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
   return config
 }, err)
 
 // response interceptor
 service.interceptors.response.use((response) => {
-  return response.data
+  const data = response.data
+  if (data.code !== 0) {
+    notification.error({
+      message: '请求错误',
+      description: data.message
+    })
+    return Promise.reject(response)
+  }
+  return data
 }, err)
 
 const installer = {

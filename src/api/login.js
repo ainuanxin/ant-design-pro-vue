@@ -1,5 +1,6 @@
 import api from './index'
 import { axios } from '@/utils/request'
+import { stringify } from 'qs'
 
 /**
  * login func
@@ -14,9 +15,28 @@ import { axios } from '@/utils/request'
  */
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
-    method: 'post',
-    data: parameter
+    url: `/oauth/token?${stringify(parameter)}`,
+    method: 'post'
+  })
+}
+
+export function getInfo () {
+  return axios({
+    url: '/v1.0/users/info',
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function getDataDict () {
+  return axios({
+    url: '/v1.0/dicts/data',
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
   })
 }
 
@@ -25,16 +45,6 @@ export function getSmsCaptcha (parameter) {
     url: api.SendSms,
     method: 'post',
     data: parameter
-  })
-}
-
-export function getInfo () {
-  return axios({
-    url: '/user/info',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
   })
 }
 

@@ -52,6 +52,10 @@ const constantRouterComponents = {
   'BindingSettings': () => import('@/views/account/settings/Binding'),
   'NotificationSettings': () => import('@/views/account/settings/Notification'),
 
+  // system
+  'User': () => import('@/views/system/user/User'),
+  'Role': () => import('@/views/system/role/Role'),
+
   'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 
